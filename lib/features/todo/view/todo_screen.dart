@@ -3,6 +3,7 @@ import 'package:todo_app/core/data/sample_data.dart';
 import 'package:todo_app/core/models/todo.dart';
 import 'package:todo_app/core/models/user.dart';
 import 'package:todo_app/features/add_todo/view/add_todo_screen.dart';
+import 'package:todo_app/features/profile/view/profile_screen.dart';
 import 'package:todo_app/features/todo/view/todo_item.dart';
 import 'package:todo_app/features/todo/view_models/todo_view_model.dart';
 
@@ -22,6 +23,9 @@ class _TodoScreenState extends State<TodoScreen> {
     setState(() {
       _todoViewModel.removeTask(todo);
     });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Task has been removed successfully.')),
+    );
   }
 
   @override
@@ -39,6 +43,16 @@ class _TodoScreenState extends State<TodoScreen> {
               );
             },
             icon: Icon(Icons.add),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ProfileScreen(user: widget.user),
+                ),
+              );
+            },
+            icon: Icon(Icons.person),
           ),
         ],
       ),

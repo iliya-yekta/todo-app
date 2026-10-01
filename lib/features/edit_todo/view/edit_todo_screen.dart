@@ -55,6 +55,9 @@ class _EditTodoScreenState extends State<EditTodoScreen> {
       _nameController.text,
       _descriptionController.text,
     );
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('Task has been changed')));
   }
 
   @override

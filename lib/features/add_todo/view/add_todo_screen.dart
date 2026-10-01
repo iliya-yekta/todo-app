@@ -41,13 +41,17 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
     }
 
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => TodoScreen(user: widget.user,)),
+      MaterialPageRoute(builder: (context) => TodoScreen(user: widget.user)),
       (route) => false,
     );
     _addTodoViewModel.addNewTask(
       _nameController.text,
       _descriptionController.text,
     );
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Task has been added successfully')));
   }
 
   @override
