@@ -9,7 +9,7 @@ flutter application for managing and recording tasks
 - Sign in and create acount in local
 - Modify task details
 
-[## Technologies]
+## Technologies
 
 - Flutter
 - Dart
