@@ -1,5 +1,5 @@
-import 'package:todo_app/core/data/sample_data.dart';
-import 'package:todo_app/core/models/todo.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_app/core/provider/todos_provider.dart';
 
 class AddTodoViewModel {
   //! Validator
@@ -14,7 +14,7 @@ class AddTodoViewModel {
   }
 
   //? Logic
-  void addNewTask(String name, String? description) {
-    todoList.add(Todo(name: name, description: description));
+  void addNewTask(WidgetRef ref, {required String name, String? description}) {
+    ref.watch(todoProvider.notifier).addTodo(name, description);
   }
 }

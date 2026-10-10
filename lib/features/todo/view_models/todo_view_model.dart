@@ -1,6 +1,6 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_app/core/data/sample_data.dart';
-import 'package:todo_app/core/models/todo.dart';
+import 'package:todo_app/core/provider/todos_provider.dart';
 
 final format = DateFormat.yMd();
 
@@ -11,7 +11,7 @@ class TodoViewModel {
     return format.format(dt);
   }
 
-  void removeTask(Todo t) {
-    todoList.removeWhere((todo) => todo.id == t.id);
+  void removeTask(WidgetRef ref, String id) {
+    ref.watch(todoProvider.notifier).removeTodo(id);
   }
 }

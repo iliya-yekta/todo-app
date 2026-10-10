@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:todo_app/core/models/todo.dart';
-import 'package:todo_app/core/models/user.dart';
 import 'package:todo_app/features/todo/view/todo_detail.dart';
 
 class TodoItem extends StatelessWidget {
@@ -9,12 +8,10 @@ class TodoItem extends StatelessWidget {
     super.key,
     required this.todo,
     required this.onRemoveTask,
-    required this.user,
   });
 
   final Todo todo;
-  final void Function(Todo todo) onRemoveTask;
-  final User user;
+  final void Function(String id) onRemoveTask;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +19,7 @@ class TodoItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => TodoDetail(todoInfo: todo, user: user),
+            builder: (context) => TodoDetail(todoInfo: todo),
           ),
         );
       },
@@ -46,7 +43,7 @@ class TodoItem extends StatelessWidget {
               Spacer(),
               IconButton(
                 onPressed: () {
-                  onRemoveTask(todo);
+                  onRemoveTask(todo.id);
                 },
                 icon: Icon(Icons.delete),
               ),

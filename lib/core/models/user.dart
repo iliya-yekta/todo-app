@@ -5,8 +5,8 @@ class User {
     required this.password,
   });
 
-  final String userName;
-  final String email;
-  final String password;
+  final String? userName;
+  final String? email;
+  final String? password;
   final DateTime dateTime = DateTime.now();
 }

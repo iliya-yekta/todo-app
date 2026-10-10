@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:todo_app/core/models/todo.dart';
-import 'package:todo_app/core/models/user.dart';
 import 'package:todo_app/core/widgets/task_form_container.dart';
 import 'package:todo_app/features/edit_todo/view_model/edit_todo_view_model.dart';
 import 'package:todo_app/features/todo/view/todo_screen.dart';
 
-class EditTodoScreen extends StatefulWidget {
-  const EditTodoScreen({super.key, required this.todo, required this.user});
+class EditTodoScreen extends ConsumerStatefulWidget {
+  const EditTodoScreen({super.key, required this.todo});
 
   final Todo todo;
-  final User user;
 
   @override
-  State<EditTodoScreen> createState() => _EditTodoScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _EditTodoScreenState();
 }
 
-class _EditTodoScreenState extends State<EditTodoScreen> {
+class _EditTodoScreenState extends ConsumerState<EditTodoScreen> {
   late final TextEditingController _nameController;
   late final TextEditingController _descriptionController;
   final EditTodoViewModel _editTodoViewModel = EditTodoViewModel();
@@ -47,13 +46,15 @@ class _EditTodoScreenState extends State<EditTodoScreen> {
 
     // prevent from push back
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => TodoScreen(user: widget.user)),
+      MaterialPageRoute(builder: (context) => TodoScreen()),
       (route) => false,
     );
+
     _editTodoViewModel.submitEditTask(
-      widget.todo,
-      _nameController.text,
-      _descriptionController.text,
+      ref,
+      widget.todo.id,
+      name: _nameController.text,
+      description: _descriptionController.text,
     );
 
     ScaffoldMessenger.of(context)
