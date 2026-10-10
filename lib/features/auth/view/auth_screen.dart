@@ -29,10 +29,6 @@ class _AuthScreenState extends ConsumerState<ConsumerStatefulWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _usernameController.text = "Hikaru";
-    _emailController.text = "hikaru@gmail.com";
-    _passwordController.text = "hH@938274jvnde";
-
     return Scaffold(
       appBar: AppBar(title: Text('Sign In')),
       body: Form(
