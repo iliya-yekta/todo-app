@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/core/models/user.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_app/core/provider/user_provider.dart';
 import 'package:todo_app/features/auth/view_model/auth_view_model.dart';
 import 'package:todo_app/features/todo/view/todo_screen.dart';
 
-class AuthScreen extends StatefulWidget {
+class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
 
   @override
-  State<AuthScreen> createState() => _AuthScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _AuthScreenState extends ConsumerState<ConsumerStatefulWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final AuthViewModel _authViewModel = AuthViewModel();
 
@@ -28,6 +29,10 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _usernameController.text = "Hikaru";
+    _emailController.text = "hikaru@gmail.com";
+    _passwordController.text = "hH@938274jvnde";
+
     return Scaffold(
       appBar: AppBar(title: Text('Sign In')),
       body: Form(
@@ -57,16 +62,15 @@ class _AuthScreenState extends State<AuthScreen> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    ref
+                        .watch(userProvider.notifier)
+                        .build(
+                          _usernameController.text,
+                          _emailController.text,
+                          _passwordController.text,
+                        );
                     Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => TodoScreen(
-                          user: User(
-                            userName: _usernameController.text,
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                          ),
-                        ),
-                      ),
+                      MaterialPageRoute(builder: (context) => TodoScreen()),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

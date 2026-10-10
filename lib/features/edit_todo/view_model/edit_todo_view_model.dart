@@ -1,5 +1,5 @@
-import 'package:todo_app/core/data/sample_data.dart';
-import 'package:todo_app/core/models/todo.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_app/core/provider/todos_provider.dart';
 
 class EditTodoViewModel {
   //! Validator
@@ -8,14 +8,14 @@ class EditTodoViewModel {
   }
 
   //? logic
-  void submitEditTask(Todo todoTask, String? name, String? description) {
-    final indexTodo = todoList.indexWhere((todo) => todo.id == todoTask.id);
-
-    if (isNameTaskNull(name)) return;
-
-    todoList[indexTodo] = todoTask.copyWith(
-      name: name,
-      description: description,
-    );
+  void submitEditTask(
+    WidgetRef ref,
+    String id, {
+    String? name,
+    String? description,
+  }) {
+    ref
+        .watch(todoProvider.notifier)
+        .editTodo(id, name: name, description: description);
   }
 }

@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/core/models/user.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:todo_app/core/widgets/task_form_container.dart';
 import 'package:todo_app/features/add_todo/view_model/add_todo_view_model.dart';
 import 'package:todo_app/features/todo/view/todo_screen.dart';
 
-class AddTodoScreen extends StatefulWidget {
-  const AddTodoScreen({super.key, required this.user});
-
-  final User user;
+class AddTodoScreen extends ConsumerStatefulWidget {
+  const AddTodoScreen({super.key});
 
   @override
-  State<AddTodoScreen> createState() => _AddTodoScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _AddTodoScreenState();
 }
 
-class _AddTodoScreenState extends State<AddTodoScreen> {
+class _AddTodoScreenState extends ConsumerState<AddTodoScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final AddTodoViewModel _addTodoViewModel = AddTodoViewModel();
@@ -41,12 +40,14 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
     }
 
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => TodoScreen(user: widget.user)),
+      MaterialPageRoute(builder: (context) => TodoScreen()),
       (route) => false,
     );
+    
     _addTodoViewModel.addNewTask(
-      _nameController.text,
-      _descriptionController.text,
+      ref,
+      name: _nameController.text,
+      description: _descriptionController.text,
     );
 
     ScaffoldMessenger.of(

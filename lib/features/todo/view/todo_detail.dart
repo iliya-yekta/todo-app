@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/core/models/todo.dart';
-import 'package:todo_app/core/models/user.dart';
 import 'package:todo_app/features/edit_todo/view/edit_todo_screen.dart';
 import 'package:todo_app/features/todo/view_models/todo_view_model.dart';
 
-class TodoDetail extends StatelessWidget {
-  TodoDetail({super.key, required this.todoInfo, required this.user});
+class TodoDetail extends ConsumerWidget {
+  TodoDetail({super.key, required this.todoInfo});
 
   final Todo todoInfo;
   final TodoViewModel _todoViewModel = TodoViewModel();
-  final User user;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: Text('Details')),
       body: Center(
@@ -87,7 +86,8 @@ class TodoDetail extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => EditTodoScreen(todo: todoInfo, user: user),
+                          builder: (context) =>
+                              EditTodoScreen(todo: todoInfo,),
                         ),
                       );
                     },

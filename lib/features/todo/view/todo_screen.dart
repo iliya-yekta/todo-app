@@ -1,28 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/core/data/sample_data.dart';
-import 'package:todo_app/core/models/todo.dart';
-import 'package:todo_app/core/models/user.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_app/core/provider/todos_provider.dart';
+import 'package:todo_app/core/provider/user_provider.dart';
 import 'package:todo_app/features/add_todo/view/add_todo_screen.dart';
 import 'package:todo_app/features/profile/view/profile_screen.dart';
 import 'package:todo_app/features/todo/view/todo_item.dart';
 import 'package:todo_app/features/todo/view_models/todo_view_model.dart';
 
-class TodoScreen extends StatefulWidget {
-  const TodoScreen({super.key, required this.user});
-
-  final User user;
+class TodoScreen extends ConsumerStatefulWidget {
+  const TodoScreen({super.key});
 
   @override
-  State<TodoScreen> createState() => _TodoScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _TodoScreenState();
 }
 
-class _TodoScreenState extends State<TodoScreen> {
+class _TodoScreenState extends ConsumerState<TodoScreen> {
   final TodoViewModel _todoViewModel = TodoViewModel();
 
-  void _removeTask(Todo todo) {
-    setState(() {
-      _todoViewModel.removeTask(todo);
-    });
+  void _removeTask(String id) {
+    _todoViewModel.removeTask(ref, id);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Task has been removed successfully.')),
     );
@@ -30,27 +26,25 @@ class _TodoScreenState extends State<TodoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider);
+    final todoList = ref.watch(todoProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text('Todo List'),
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => AddTodoScreen(user: widget.user),
-                ),
-              );
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (context) => AddTodoScreen()));
             },
             icon: Icon(Icons.add),
           ),
           IconButton(
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ProfileScreen(user: widget.user),
-                ),
-              );
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (context) => ProfileScreen()));
             },
             icon: Icon(Icons.person),
           ),
@@ -61,7 +55,7 @@ class _TodoScreenState extends State<TodoScreen> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
             child: Text(
-              'Welcome ${widget.user.userName}',
+              'Welcome ${user.userName}',
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 color: Theme.of(context).colorScheme.secondary,
                 fontWeight: FontWeight.bold,
@@ -69,15 +63,17 @@ class _TodoScreenState extends State<TodoScreen> {
             ),
           ),
           Expanded(
-            child: ListView.separated(
-              itemBuilder: (context, index) => TodoItem(
-                todo: todoList[index],
-                onRemoveTask: _removeTask,
-                user: widget.user,
-              ),
-              separatorBuilder: (context, index) => const SizedBox(height: 16),
-              itemCount: todoList.length,
-            ),
+            child: todoList.isEmpty
+                ? Center(child: Text('Theres no task. Add new one.'))
+                : ListView.separated(
+                    itemBuilder: (context, index) => TodoItem(
+                      todo: todoList[index],
+                      onRemoveTask: _removeTask,
+                    ),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 16),
+                    itemCount: todoList.length,
+                  ),
           ),
         ],
       ),
