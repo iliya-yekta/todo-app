@@ -14,3 +14,4 @@ flutter application for managing and recording tasks
 - Flutter
 - Dart
 - Libraries (uuid and intl)
+- Riverpod
