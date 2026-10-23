@@ -8,6 +8,7 @@ class UserProviderNotifier extends StateNotifier<User> {
   void build(String userName, String email, String password) {
     state = User(userName: userName, email: email, password: password);
   }
+
 }
 
 final userProvider =

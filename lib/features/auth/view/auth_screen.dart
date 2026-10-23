@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:todo_app/core/provider/user_provider.dart';
 import 'package:todo_app/features/auth/view_model/auth_view_model.dart';
 import 'package:todo_app/features/todo/view/todo_screen.dart';
@@ -65,9 +66,8 @@ class _AuthScreenState extends ConsumerState<ConsumerStatefulWidget> {
                           _emailController.text,
                           _passwordController.text,
                         );
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => TodoScreen()),
-                    );
+
+                    context.go('todo');
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Account has been created successfully'),

@@ -24,6 +24,10 @@ class TodosProvider extends StateNotifier<List<Todo>> {
       ...state.sublist(todoIndex + 1, state.length),
     ];
   }
+
+  Todo findTodo(String id) {
+    return state.firstWhere((todo) => todo.id == id);
+  }
 }
 
 final todoProvider = StateNotifierProvider((ref) => TodosProvider());

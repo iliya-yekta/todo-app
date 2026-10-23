@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:todo_app/core/provider/todos_provider.dart';
 import 'package:todo_app/core/provider/user_provider.dart';
 import 'package:todo_app/features/add_todo/view/add_todo_screen.dart';
@@ -33,18 +34,12 @@ class _TodoScreenState extends ConsumerState<TodoScreen> {
         title: Text('Todo List'),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => AddTodoScreen()));
-            },
+            onPressed: () => context.go('/todo/todo_add'),
             icon: Icon(Icons.add),
           ),
           IconButton(
             onPressed: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => ProfileScreen()));
+              context.push('/profile');
             },
             icon: Icon(Icons.person),
           ),

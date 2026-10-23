@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:todo_app/core/models/todo.dart';
 import 'package:todo_app/features/todo/view/todo_detail.dart';
 
 class TodoItem extends StatelessWidget {
-  const TodoItem({
-    super.key,
-    required this.todo,
-    required this.onRemoveTask,
-  });
+  const TodoItem({super.key, required this.todo, required this.onRemoveTask});
 
   final Todo todo;
   final void Function(String id) onRemoveTask;
@@ -16,13 +13,7 @@ class TodoItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => TodoDetail(todoInfo: todo),
-          ),
-        );
-      },
+      onTap: () => context.go('/todo/todo_detail/${todo.id}'),
       child: Card(
         margin: EdgeInsets.symmetric(horizontal: 12),
         child: Padding(
