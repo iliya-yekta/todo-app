@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_app/core/router/router.dart';
 
 import 'package:todo_app/core/theme/app_theme.dart';
-import 'package:todo_app/features/auth/view/auth_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,8 +11,8 @@ void main() async {
 
   runApp(
     ProviderScope(
-      child: MaterialApp(
-        home: AuthScreen(),
+      child: MaterialApp.router(
+        routerConfig: router,
         theme: theme,
         debugShowCheckedModeBanner: false,
       ),

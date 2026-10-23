@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:todo_app/core/models/todo.dart';
+import 'package:todo_app/core/provider/todos_provider.dart';
 import 'package:todo_app/core/widgets/task_form_container.dart';
 import 'package:todo_app/features/edit_todo/view_model/edit_todo_view_model.dart';
 import 'package:todo_app/features/todo/view/todo_screen.dart';
 
 class EditTodoScreen extends ConsumerStatefulWidget {
-  const EditTodoScreen({super.key, required this.todo});
+  const EditTodoScreen({super.key, required this.id});
 
-  final Todo todo;
+  final String id;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _EditTodoScreenState();
@@ -19,13 +21,14 @@ class _EditTodoScreenState extends ConsumerState<EditTodoScreen> {
   late final TextEditingController _nameController;
   late final TextEditingController _descriptionController;
   final EditTodoViewModel _editTodoViewModel = EditTodoViewModel();
+  Todo? todo;
 
   @override
   void initState() {
-    _nameController = TextEditingController(text: widget.todo.name);
-    _descriptionController = TextEditingController(
-      text: widget.todo.description,
-    );
+    todo = ref.watch(todoProvider.notifier).findTodo(widget.id);
+    _nameController = TextEditingController(text: todo!.name);
+    _descriptionController = TextEditingController(text: todo!.description);
+
     super.initState();
   }
 
@@ -45,14 +48,11 @@ class _EditTodoScreenState extends ConsumerState<EditTodoScreen> {
     }
 
     // prevent from push back
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => TodoScreen()),
-      (route) => false,
-    );
+    context.go('/todo');
 
     _editTodoViewModel.submitEditTask(
       ref,
-      widget.todo.id,
+      todo!.id,
       name: _nameController.text,
       description: _descriptionController.text,
     );
