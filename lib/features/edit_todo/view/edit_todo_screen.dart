@@ -6,7 +6,6 @@ import 'package:todo_app/core/models/todo.dart';
 import 'package:todo_app/core/provider/todos_provider.dart';
 import 'package:todo_app/core/widgets/task_form_container.dart';
 import 'package:todo_app/features/edit_todo/view_model/edit_todo_view_model.dart';
-import 'package:todo_app/features/todo/view/todo_screen.dart';
 
 class EditTodoScreen extends ConsumerStatefulWidget {
   const EditTodoScreen({super.key, required this.id});
@@ -47,15 +46,14 @@ class _EditTodoScreenState extends ConsumerState<EditTodoScreen> {
       return;
     }
 
-    // prevent from push back
-    context.go('/todo');
-
     _editTodoViewModel.submitEditTask(
       ref,
       todo!.id,
-      name: _nameController.text,
-      description: _descriptionController.text,
+      _nameController.text,
+      _descriptionController.text,
     );
+
+    context.go('/todo');
 
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('Task has been changed')));

@@ -3,10 +3,12 @@ import 'package:uuid/uuid.dart';
 const uuid = Uuid();
 
 class Todo {
-  Todo({required this.name, description, this.updateAt})
-    : isCompleted = false, description = description == '' ? 'No description' : description;
+  Todo({String? id, required this.name, description, this.updateAt})
+    : isCompleted = false,
+      description = description == '' ? 'No description' : description,
+      id = id ?? uuid.v4();
 
-  final String id = uuid.v4();
+  final String id;
   final String name;
   final String description;
   final bool isCompleted;
@@ -15,6 +17,7 @@ class Todo {
 
   Todo copyWith({String? name, String? description, String? updatedAt}) {
     return Todo(
+      id: id,
       name: name ?? this.name,
       description: description ?? this.description,
       updateAt: DateTime.now(),

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_app/core/models/todo.dart';
 import 'package:todo_app/core/provider/todos_provider.dart';
 
 class AddTodoViewModel {
@@ -15,6 +16,6 @@ class AddTodoViewModel {
 
   //? Logic
   void addNewTask(WidgetRef ref, {required String name, String? description}) {
-    ref.watch(todoProvider.notifier).addTodo(name, description);
+    ref.watch(todoProvider.notifier).addTodo(Todo(name: name, description: description));
   }
 }
