@@ -7,7 +7,7 @@ import 'package:todo_app/features/todo/view/todo_detail.dart';
 import 'package:todo_app/features/todo/view/todo_screen.dart';
 
 final router = GoRouter(
-  initialLocation: '/auth',
+  initialLocation: '/todo',
   routes: <RouteBase>[
     GoRoute(path: '/auth', builder: (context, state) => AuthScreen()),
     GoRoute(

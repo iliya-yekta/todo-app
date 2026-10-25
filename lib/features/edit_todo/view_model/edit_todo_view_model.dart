@@ -10,12 +10,10 @@ class EditTodoViewModel {
   //? logic
   void submitEditTask(
     WidgetRef ref,
-    String id, {
-    String? name,
-    String? description,
-  }) {
-    ref
-        .watch(todoProvider.notifier)
-        .editTodo(id, name: name, description: description);
+    String id,
+    String name,
+    String description,
+  ) {
+    ref.watch(todoProvider.notifier).editTodo(id, name, description);
   }
 }

@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import 'package:todo_app/core/widgets/task_form_container.dart';
 import 'package:todo_app/features/add_todo/view_model/add_todo_view_model.dart';
-import 'package:todo_app/features/todo/view/todo_screen.dart';
 
 class AddTodoScreen extends ConsumerStatefulWidget {
   const AddTodoScreen({super.key});
@@ -40,13 +39,13 @@ class _AddTodoScreenState extends ConsumerState<AddTodoScreen> {
       return;
     }
 
-    context.go('/todo');
-
     _addTodoViewModel.addNewTask(
       ref,
       name: _nameController.text,
       description: _descriptionController.text,
     );
+
+    context.go('/todo');
 
     ScaffoldMessenger.of(
       context,
