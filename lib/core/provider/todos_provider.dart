@@ -1,33 +1,74 @@
-import 'package:flutter_riverpod/legacy.dart';
-import 'package:todo_app/core/data/sample_data.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:todo_app/core/models/todo.dart';
+import 'package:todo_app/core/network/dio_client.dart';
 
-class TodosProvider extends StateNotifier<List<Todo>> {
-  TodosProvider() : super(todoList);
+class TodoProviderNotifier extends AsyncNotifier<List<Todo>> {
+  @override
+  Future<List<Todo>> build() async {
+    final response = await dio.get('/todo');
 
-  void addTodo(String name, String? description) {
-    state = [...state, Todo(name: name, description: description)];
+    final dataList = response.data as List<dynamic>;
+
+    List<Todo> result = dataList.map((data) {
+      return Todo.fromJson(data as Map<String, dynamic>);
+    }).toList();
+
+    return result;
   }
 
-  void removeTodo(String id) {
-    state = state.where((todo) => todo.id != id).toList();
+  Future<void> addTodo(Todo todo) async {
+    state = const AsyncLoading();
+
+    await dio.post(
+      '/todo',
+      data: todo.toJson(),
+    );
+
+    final currentTodo = state.requireValue;
+
+    state = AsyncData([...currentTodo, todo]);
   }
 
-  void editTodo(String id, {String? name, String? description}) {
-    final todoIndex = state.indexWhere((todo) => todo.id == id);
+  Future<void> removeTodo(String id) async {
+    state = const AsyncLoading();
 
-    state = [
-      ...state.sublist(0, todoIndex),
-      state
-          .firstWhere((todo) => todo.id == id)
-          .copyWith(name: name, description: description),
-      ...state.sublist(todoIndex + 1, state.length),
-    ];
+    await dio.delete('/todo/$id');
+
+    final currentTodo = state.requireValue;
+
+    state = AsyncData([...currentTodo.where((todo) => todo.id != id)]);
+  }
+
+  Future<void> editTodo(String id, String name, String description) async {
+    state = const AsyncLoading();
+
+    await dio.put(
+      '/todo/$id',
+      data: {'name': name, 'description': description},
+    );
+
+    final currentTodo = state.requireValue;
+
+    final int newTodoIndex = currentTodo.indexWhere((todo) => todo.id == id);
+
+    final Todo newTodo = currentTodo
+        .firstWhere((todo) => todo.id == id)
+        .copyWith(name: name, description: description);
+
+    state = AsyncData([
+      ...currentTodo.sublist(0, newTodoIndex),
+      newTodo,
+      ...currentTodo.sublist(newTodoIndex + 1, currentTodo.length),
+    ]);
   }
 
   Todo findTodo(String id) {
-    return state.firstWhere((todo) => todo.id == id);
+    return state.requireValue.firstWhere((todo) => todo.id == id);
   }
 }
 
-final todoProvider = StateNotifierProvider((ref) => TodosProvider());
+final todoProvider =
+    AsyncNotifierProvider.autoDispose<TodoProviderNotifier, List<Todo>>(
+      TodoProviderNotifier.new,
+    );

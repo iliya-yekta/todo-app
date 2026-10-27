@@ -7,8 +7,8 @@ final format = DateFormat.yMd();
 class TodoViewModel {
   TodoViewModel();
 
-  String dtFormatter(DateTime dt) {
-    return format.format(dt);
+  String dtFormatter(String dt) {
+    return format.format(DateTime.parse(dt));
   }
 
   void removeTask(WidgetRef ref, String id) {

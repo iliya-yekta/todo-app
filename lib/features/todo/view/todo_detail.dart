@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_app/core/provider/todos_provider.dart';
-import 'package:todo_app/features/edit_todo/view/edit_todo_screen.dart';
 import 'package:todo_app/features/todo/view_models/todo_view_model.dart';
 
 class TodoDetail extends ConsumerWidget {
@@ -14,6 +13,7 @@ class TodoDetail extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todo = ref.watch(todoProvider.notifier).findTodo(id);
+
     return Scaffold(
       appBar: AppBar(title: Text('Details')),
       body: Center(
@@ -58,7 +58,7 @@ class TodoDetail extends ConsumerWidget {
                 children: [
                   Text('Description: '),
                   Text(
-                    todo.description,
+                    todo.description!,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
                       fontWeight: FontWeight.bold,

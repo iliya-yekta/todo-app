@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:todo_app/core/models/todo.dart';
-import 'package:todo_app/features/todo/view/todo_detail.dart';
 
 class TodoItem extends StatelessWidget {
   const TodoItem({super.key, required this.todo, required this.onRemoveTask});
@@ -25,9 +24,7 @@ class TodoItem extends StatelessWidget {
                 children: [
                   Text(todo.name),
                   Text(
-                    todo.description == ''
-                        ? 'No description'
-                        : todo.description,
+                    todo.description!
                   ),
                 ],
               ),

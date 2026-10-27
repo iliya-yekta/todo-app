@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:todo_app/core/provider/todos_provider.dart';
 import 'package:todo_app/core/provider/user_provider.dart';
-import 'package:todo_app/features/add_todo/view/add_todo_screen.dart';
-import 'package:todo_app/features/profile/view/profile_screen.dart';
 import 'package:todo_app/features/todo/view/todo_item.dart';
 import 'package:todo_app/features/todo/view_models/todo_view_model.dart';
 
@@ -29,6 +28,7 @@ class _TodoScreenState extends ConsumerState<TodoScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
     final todoList = ref.watch(todoProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Todo List'),
@@ -58,17 +58,24 @@ class _TodoScreenState extends ConsumerState<TodoScreen> {
             ),
           ),
           Expanded(
-            child: todoList.isEmpty
-                ? Center(child: Text('Theres no task. Add new one.'))
-                : ListView.separated(
-                    itemBuilder: (context, index) => TodoItem(
-                      todo: todoList[index],
-                      onRemoveTask: _removeTask,
-                    ),
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 16),
-                    itemCount: todoList.length,
-                  ),
+            child: todoList.when(
+              data: (items) {
+                return items.isEmpty
+                    ? Center(child: Text('Theres no task. Add new one.'))
+                    : ListView.separated(
+                        itemBuilder: (context, index) => TodoItem(
+                          todo: items[index],
+                          onRemoveTask: _removeTask,
+                        ),
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 16),
+                        itemCount: items.length,
+                      );
+              },
+              error: (object, stackTrace) =>
+                  Center(child: Text(object.toString())),
+              loading: () => Center(child: CircularProgressIndicator()),
+            ),
           ),
         ],
       ),
