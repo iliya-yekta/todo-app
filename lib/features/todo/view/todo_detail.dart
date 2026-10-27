@@ -58,7 +58,7 @@ class TodoDetail extends ConsumerWidget {
                 children: [
                   Text('Description: '),
                   Text(
-                    todo.description,
+                    todo.description!,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
                       fontWeight: FontWeight.bold,

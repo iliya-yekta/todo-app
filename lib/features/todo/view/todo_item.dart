@@ -24,9 +24,7 @@ class TodoItem extends StatelessWidget {
                 children: [
                   Text(todo.name),
                   Text(
-                    todo.description == ''
-                        ? 'No description'
-                        : todo.description,
+                    todo.description!
                   ),
                 ],
               ),
